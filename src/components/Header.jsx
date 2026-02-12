@@ -1,0 +1,13 @@
+import React from 'react'
+import './style/Header.css'
+
+const Header = (params) => {
+  return (
+    <header className='Header'>
+        <h3>오늘은 📆</h3>
+        <h1>{new Date().toDateString()}</h1>
+    </header>
+  )
+}
+
+export default Header
