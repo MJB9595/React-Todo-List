@@ -1,35 +1,66 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import './App.css';
+import Header from './components/Header';
+import TodoEditor from './components/TodoEditor';
+import TodoList from './components/TodoList';
+import { useState, useRef } from 'react';
+
+const mockData=[
+  {
+    id:0,
+    isDone:false,
+    content:'react 공부하기',
+    date:new Date().getTime()
+  },
+  {
+    id:1,
+    isDone:false,
+    content:'빨래하기',
+    date:new Date().getTime()
+  },
+  {
+    id:2,
+    isDone:false,
+    content:'노래 연습하기',
+    date:new Date().getTime()
+  },
+]
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const [todos, setTodos]= useState(mockData)
+  const idRef=useRef(3)
+
+  const onCreate =(content)=> {
+    const newTodo={
+      id:idRef.current++,
+      isDone:false,
+      content:content,
+      date:new Date().getTime()
+    }
+
+    setTodos([newTodo,...todos])
+  }
+
+  const onUpdate =(targetId)=> {
+    setTodos(
+      todos.map((todo)=>
+        todo.id===targetId ? {...todo, isDone:!todo.isDone}
+          : todo
+      )
+    )
+  }
+
+  const onDelete=(targetId)=>{
+    setTodos(todos.filter((todo)=>todo.id !==targetId))
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className='App'>
+      <Header />
+      <TodoEditor onCreate={onCreate} />
+      <TodoList todos={todos} onUpdate={onUpdate} onDelete={onDelete}/>
+    </div>
+  );
 }
 
-export default App
+export default App;
