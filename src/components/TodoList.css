@@ -9,7 +9,7 @@
     border: none;
     border-bottom: 1px solid #cfcfcf;
 }
-.todo_wrapper {
+.todos_wrapper {
     display: flex;
     flex-direction: column;
     gap: 20px;
