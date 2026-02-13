@@ -1,42 +1,42 @@
-import React,{useState, useRef} from 'react'
-import './style/TodoEditor.css'
+import React, { useState, useRef, useEffect } from 'react'
+import "./TodoEditor.css"
+import { useTodoStore } from '../contexts/TodoContext'
+const TodoEditor = () => {
 
-const TodoEditor = ({onCreate}) => {
+  const { createTodo } = useTodoStore()
+  const [content, setContent] = useState("")
+  const inputRef = useRef(null)
+
+  useEffect(() => {
+    inputRef.current.focus()
+  },[])
+
+  const onChangeContent = (e) => {
+    setContent(e.target.value)
+  }
+
+  const onSubmit = () => {
     
-    const [content, setContent]=useState("")
-    const inputRef=useRef(3)
+    createTodo(content)
+    setContent("")
+    inputRef.current?.focus()
+  }
 
-    const onChangeContent=(e)=>{
-        setContent(e.target.value)
+  const onKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      onSubmit()
     }
-
-    const onSubmit=()=>{
-        if(content=='') {
-            inputRef.current.focus()
-            return
-        }
-
-        onCreate(content)
-        setContent("")
-    }
-
-    const onKeyDown =(e)=>{
-        if(e.keyCode==13){
-            onSubmit()
-        }
-    }
-
-
+  }
   return (
     <div className='Editor'>
-      <input type="text"
-       placeholder='새로운 Todo...'
-       ref={inputRef}
-       value={content}
-       onChange={onChangeContent}
-       onKeyDown={onKeyDown}/>
-      <button
-      onClick={onSubmit}>추가</button>
+      <input
+        ref={inputRef}
+        value={content}
+        onChange={onChangeContent}
+        onKeyDown={onKeyDown}
+        type="text"
+        placeholder='새로운 Todo...' />
+      <button onClick={onSubmit}>추가</button>
     </div>
   )
 }
